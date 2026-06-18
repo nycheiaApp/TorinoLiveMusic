@@ -16,7 +16,6 @@
     --violet: #7B61FF;
     --border: rgba(255,255,255,0.08);
     --radius: 14px;
-    /* 🎨 Font di sistema — zero dipendenze esterne */
     --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Avenir Next", "Century Gothic", system-ui, sans-serif;
     --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Segoe UI Mono", Monaco, Menlo, Consolas, monospace;
@@ -63,6 +62,33 @@
   h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; }
   h1 em { font-style: normal; color: var(--pink); }
   .subtitle { color: var(--muted); margin-top: 0.5rem; font-size: 1rem; }
+  .subtitle-line2 { color: var(--muted); margin-top: 0.3rem; font-size: 0.95rem; }
+
+  /* MANIFESTO */
+  .manifesto {
+    margin: 2.5rem 0;
+    padding: 2rem;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(212,255,0,0.08), rgba(123,97,255,0.05));
+    border: 1px solid rgba(212,255,0,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .manifesto::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--lime), var(--violet));
+  }
+  .manifesto h2 {
+    font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 700; margin-bottom: 0.8rem; letter-spacing: -0.5px;
+  }
+  .manifesto h2 em { font-style: normal; color: var(--lime); }
+  .manifesto p { color: var(--text); line-height: 1.6; margin-bottom: 0.6rem; max-width: 720px; }
+  .manifesto .privacy { color: var(--muted); font-size: 0.9rem; }
+  .manifesto .motto {
+    margin-top: 1.2rem; font-style: italic; color: var(--pink);
+    font-size: 1rem; border-top: 1px solid var(--border); padding-top: 1rem;
+  }
 
   /* FILTERS */
   .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
@@ -92,11 +118,32 @@
   .card-time { font-family: var(--font-mono); color: var(--lime); font-size: 0.8rem; margin-bottom: 0.3rem; }
   .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.2rem; }
   .card-venue { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.8rem; flex: 1; }
-  .meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+  .meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; gap: 0.5rem; flex-wrap: wrap; }
   .tag { padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; background: rgba(212,255,0,0.15); color: var(--lime); }
   .tag.pink { background: rgba(255,60,172,0.15); color: var(--pink); }
   .tag.violet { background: rgba(123,97,255,0.15); color: var(--violet); }
   .price { font-weight: 600; }
+
+  /* SHARE BUTTON */
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.75rem; border-radius: 999px;
+    background: var(--surface-hover); border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.8rem;
+    transition: .2s; margin-left: auto;
+  }
+  .share-btn:hover { color: var(--lime); border-color: var(--lime); }
+  .share-btn svg { width: 14px; height: 14px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--lime); color: #000; padding: 0.8rem 1.5rem;
+    border-radius: 999px; font-weight: 600; font-size: 0.9rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 1000;
+    opacity: 0; transition: all .3s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* VENUE DETAIL */
   .venue-header { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
@@ -134,6 +181,7 @@
     nav { gap: 1rem; width: 100%; justify-content: center; margin-top: 0.5rem; }
     main { padding: 1.5rem; }
     h1 { font-size: 2.2rem; }
+    .manifesto { padding: 1.5rem; }
   }
 </style>
 </head>
@@ -150,17 +198,18 @@
 
 <main id="app"></main>
 
+<div class="toast" id="toast">Link copiato negli appunti</div>
+
 <footer>
   <p>© 2026 TorinoLive. Musica dal vivo, zero complicazioni. Dati aggiornati manualmente.</p>
 </footer>
 
-<!-- 📝 FILE DATI ESTERNO -->
 <script src="data.js"></script>
 
-<!-- LOGICA -->
 <script>
 const getToday = () => new Date().toISOString().split('T')[0];
 const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+const formatDateLong = (dateStr) => new Date(dateStr).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 const slugify = (str) => str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
 const getVenue = (id) => DATA.venues.find(v => v.id === id);
 
@@ -196,8 +245,17 @@ function renderOggi() {
       <section class="hero">
         <div class="date-label">${formatDate(today)}</div>
         <h1>Cosa suona <em>oggi</em><br>a Torino.</h1>
-        <p class="subtitle">${todayEvents.length} eventi dal vivo · ${DATA.venues.length} locali attivi</p>
+        <p class="subtitle">Concerti · Jazz · Blues · Folk · Classica · Rock · Elettronica</p>
+        <p class="subtitle-line2">Tutti i locali di Torino in un unico archivio.</p>
       </section>
+
+      <section class="manifesto">
+        <h2>L'<em>archivio libero</em> della musica dal vivo</h2>
+        <p>Raccogliamo e organizziamo tutti gli eventi pubblici del web per aiutarti a scegliere la tua serata.</p>
+        <p class="privacy">Nessun tracciamento, nessun cookie. Solo la musica che ami, senza sorveglianza.</p>
+        <p class="motto">Non siamo ancora quello che vogliamo diventare. Ma ci stiamo lavorando, ogni giorno.</p>
+      </section>
+
       <div class="filters">
         <button class="chip active" onclick="filterEvents('all')">Tutti</button>
         <button class="chip" onclick="filterEvents('Gratis')">Gratis</button>
@@ -316,6 +374,7 @@ function renderGenereEvents(genreSlug) {
 function eventCard(e) {
   const v = getVenue(e.venueId);
   const isToday = e.date === getToday();
+  const tagClass = e.genre === 'Techno' || e.genre === 'Elettronica' ? 'violet' : e.genre === 'Jazz' || e.genre === 'Hip-Hop' ? 'pink' : '';
   return `
     <article class="card">
       <div class="card-img" style="background:${v?.image || 'var(--surface)'}"></div>
@@ -324,12 +383,66 @@ function eventCard(e) {
         <h3 class="card-title">${e.title}</h3>
         <p class="card-venue">${v?.name || 'Locale'} · ${v?.district || ''}</p>
         <div class="meta">
-          <span class="tag ${e.genre === 'Techno' || e.genre === 'Elettronica' ? 'violet' : e.genre === 'Jazz' || e.genre === 'Hip-Hop' ? 'pink' : ''}">${e.genre}</span>
+          <span class="tag ${tagClass}">${e.genre}</span>
           <span class="price">${e.price}</span>
+          <button class="share-btn" onclick="event.stopPropagation(); shareEvent(${e.id})" aria-label="Condividi">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            Condividi
+          </button>
         </div>
       </div>
     </article>
   `;
+}
+
+async function shareEvent(eventId) {
+  const e = DATA.events.find(ev => ev.id === eventId);
+  if (!e) return;
+  const v = getVenue(e.venueId);
+  const isToday = e.date === getToday();
+  const dateLabel = isToday ? 'OGGI' : formatDateLong(e.date).toUpperCase();
+
+  const text = `🎵 ${e.title}\n` +
+    `📅 ${dateLabel} · ore ${e.time}\n` +
+    `📍 ${v?.name || 'Locale'} — ${v?.address || ''}, ${v?.district || ''}\n` +
+    `🎸 Genere: ${e.genre}\n` +
+    `🎟️ Prezzo: ${e.price}\n\n` +
+    `via TorinoLive`;
+
+  const shareData = {
+    title: e.title,
+    text: text,
+    url: window.location.href
+  };
+
+  // Web Share API (mobile) — apre il menu di condivisione nativo del dispositivo
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      if (err.name !== 'AbortError') fallbackCopy(text);
+    }
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  navigator.clipboard?.writeText(text).then(() => {
+    showToast('Dettagli evento copiati negli appunti');
+  }).catch(() => {
+    showToast('Impossibile condividere');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 function filterEvents(filter) {
