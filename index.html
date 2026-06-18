@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TorinoLive — Musica dal vivo</title>
+<style>
+  :root {
+    --bg: #0A0A0F;
+    --surface: #14141C;
+    --surface-hover: #1A1A24;
+    --text: #F5F5F7;
+    --muted: #9CA3AF;
+    --lime: #D4FF00;
+    --pink: #FF3CAC;
+    --violet: #7B61FF;
+    --border: rgba(255,255,255,0.08);
+    --radius: 14px;
+    /* 🎨 Font di sistema — zero dipendenze esterne */
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Avenir Next", "Century Gothic", system-ui, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Segoe UI Mono", Monaco, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-body); line-height: 1.5;
+    min-height: 100vh; overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(123,97,255,0.12), transparent 50%),
+      radial-gradient(circle at 85% 20%, rgba(255,60,172,0.08), transparent 50%);
+  }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(10,10,15,0.75); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: var(--lime); }
+  nav { display: flex; gap: 1.5rem; }
+  nav a { font-size: 0.95rem; color: var(--muted); transition: .2s; position: relative; padding-bottom: 4px; }
+  nav a:hover, nav a.active { color: var(--text); }
+  nav a.active::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+    background: var(--lime); border-radius: 2px;
+  }
+
+  /* MAIN */
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem; min-height: 80vh; }
+  .view { display: none; animation: fadeIn .3s ease; }
+  .view.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HERO */
+  .hero { margin-bottom: 2rem; }
+  .date-label { font-family: var(--font-mono); color: var(--lime); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; }
+  h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; }
+  h1 em { font-style: normal; color: var(--pink); }
+  .subtitle { color: var(--muted); margin-top: 0.5rem; font-size: 1rem; }
+
+  /* FILTERS */
+  .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .chip {
+    padding: 0.45rem 1rem; border-radius: 999px; background: var(--surface);
+    border: 1px solid var(--border); color: var(--muted); font-size: 0.85rem;
+    transition: .2s;
+  }
+  .chip:hover { color: var(--text); border-color: var(--lime); }
+  .chip.active { background: var(--lime); color: #000; border-color: var(--lime); font-weight: 600; }
+
+  /* GRID & CARDS */
+  .grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    cursor: pointer; display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--lime); box-shadow: 0 10px 30px rgba(212,255,0,0.05); }
+  .card-img { height: 160px; position: relative; }
+  .card-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 60%);
+  }
+  .card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
+  .card-time { font-family: var(--font-mono); color: var(--lime); font-size: 0.8rem; margin-bottom: 0.3rem; }
+  .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .card-venue { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.8rem; flex: 1; }
+  .meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+  .tag { padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; background: rgba(212,255,0,0.15); color: var(--lime); }
+  .tag.pink { background: rgba(255,60,172,0.15); color: var(--pink); }
+  .tag.violet { background: rgba(123,97,255,0.15); color: var(--violet); }
+  .price { font-weight: 600; }
+
+  /* VENUE DETAIL */
+  .venue-header { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+  .venue-hero { height: 250px; border-radius: var(--radius); position: relative; }
+  .venue-hero::after {
+    content: ''; position: absolute; inset: 0; border-radius: var(--radius);
+    background: linear-gradient(to top, var(--bg), transparent);
+  }
+  .venue-info h2 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .venue-meta { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--muted); margin-bottom: 1rem; }
+  .venue-desc { color: var(--muted); max-width: 700px; line-height: 1.6; }
+  .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+  .back-btn:hover { color: var(--lime); }
+
+  /* GENRE TILES */
+  .genre-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .genre-tile {
+    height: 140px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; text-align: center;
+    position: relative; overflow: hidden; cursor: pointer; transition: transform .2s;
+  }
+  .genre-tile:hover { transform: scale(1.03); }
+  .genre-tile::before {
+    content: ''; position: absolute; inset: 0; background: inherit; filter: brightness(0.4); transition: .2s;
+  }
+  .genre-tile:hover::before { filter: brightness(0.6); }
+  .genre-tile span { position: relative; z-index: 2; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 3rem 2rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 4rem; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    header { padding: 1rem; flex-wrap: wrap; }
+    nav { gap: 1rem; width: 100%; justify-content: center; margin-top: 0.5rem; }
+    main { padding: 1.5rem; }
+    h1 { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Torino<span>Live</span></div>
+  <nav id="nav">
+    <a href="#oggi" class="active">Oggi</a>
+    <a href="#locali">Locali</a>
+    <a href="#generi">Generi</a>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <p>© 2026 TorinoLive. Musica dal vivo, zero complicazioni. Dati aggiornati manualmente.</p>
+</footer>
+
+<!-- 📝 FILE DATI ESTERNO -->
+<script src="data.js"></script>
+
+<!-- LOGICA -->
+<script>
+const getToday = () => new Date().toISOString().split('T')[0];
+const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+const slugify = (str) => str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+const getVenue = (id) => DATA.venues.find(v => v.id === id);
+
+const routes = {
+  '#oggi': renderOggi,
+  '#locali': renderLocali,
+  '#generi': renderGeneri,
+  default: () => location.hash = '#oggi'
+};
+
+function router() {
+  const hash = location.hash || '#oggi';
+  document.querySelectorAll('nav a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === hash || (hash.startsWith('#locale/') || hash.startsWith('#genere/') ? false : a.getAttribute('href') === hash));
+  });
+  
+  if (hash.startsWith('#locale/')) return renderVenueDetail(hash.split('/')[1]);
+  if (hash.startsWith('#genere/')) return renderGenereEvents(hash.split('/')[1]);
+
+  const renderFn = routes[hash] || routes.default;
+  renderFn();
+}
+
+window.addEventListener('hashchange', router);
+window.addEventListener('load', router);
+
+function renderOggi() {
+  const today = getToday();
+  const todayEvents = DATA.events.filter(e => e.date === today).sort((a,b) => a.time.localeCompare(b.time));
+  
+  const html = `
+    <div class="view active" id="view-oggi">
+      <section class="hero">
+        <div class="date-label">${formatDate(today)}</div>
+        <h1>Cosa suona <em>oggi</em><br>a Torino.</h1>
+        <p class="subtitle">${todayEvents.length} eventi dal vivo · ${DATA.venues.length} locali attivi</p>
+      </section>
+      <div class="filters">
+        <button class="chip active" onclick="filterEvents('all')">Tutti</button>
+        <button class="chip" onclick="filterEvents('Gratis')">Gratis</button>
+        <button class="chip" onclick="filterEvents('Dopo 23:00')">Dopo mezzanotte</button>
+        ${DATA.genres.slice(0,4).map(g => `<button class="chip" onclick="filterEvents('${g.name}')">${g.name}</button>`).join('')}
+      </div>
+      <div class="grid" id="events-grid">
+        ${todayEvents.map(e => eventCard(e)).join('')}
+      </div>
+      ${todayEvents.length === 0 ? '<p style="color:var(--muted); margin-top:2rem;">Nessun evento registrato per oggi. Aggiungi eventi nel file data.js</p>' : ''}
+    </div>
+  `;
+  document.getElementById('app').innerHTML = html;
+}
+
+function renderLocali() {
+  const html = `
+    <div class="view active">
+      <section class="hero"><h1>I <em>Locali</em></h1><p class="subtitle">${DATA.venues.length} spazi dove la musica prende vita</p></section>
+      <div class="grid">
+        ${DATA.venues.map(v => `
+          <article class="card" onclick="location.hash='#locale/${v.id}'">
+            <div class="card-img" style="background:${v.image}"></div>
+            <div class="card-body">
+              <h3 class="card-title">${v.name}</h3>
+              <p class="card-venue">${v.district} · ${v.address}</p>
+              <div class="meta">
+                <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+                  ${[...new Set(DATA.events.filter(e=>e.venueId===v.id).map(e=>e.genre))].slice(0,3).map(g => `<span class="tag" style="background:rgba(255,255,255,0.1); color:#fff">${g}</span>`).join('')}
+                </div>
+                <span class="price" style="font-size:0.85rem; color:var(--muted)">Prossimo show →</span>
+              </div>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('app').innerHTML = html;
+}
+
+function renderVenueDetail(slug) {
+  const venue = getVenue(slug);
+  if (!venue) return location.hash = '#locali';
+  
+  const venueEvents = DATA.events.filter(e => e.venueId === venue.id).sort((a,b) => a.date.localeCompare(b.date));
+  const upcoming = venueEvents.filter(e => e.date >= getToday());
+
+  document.getElementById('nav').querySelectorAll('a').forEach(a => a.classList.remove('active'));
+  document.getElementById('nav').querySelector('a[href="#locali"]').classList.add('active');
+
+  const html = `
+    <div class="view active">
+      <button class="back-btn" onclick="location.hash='#locali'">← Torna ai locali</button>
+      <div class="venue-header">
+        <div class="venue-hero" style="background:${venue.image}"></div>
+        <div class="venue-info">
+          <h2>${venue.name}</h2>
+          <div class="venue-meta">
+            <span>📍 ${venue.district}, ${venue.address}</span>
+            <span>👥 ${venue.capacity}</span>
+            <span>📱 ${venue.instagram}</span>
+          </div>
+          <p class="venue-desc">${venue.description}</p>
+        </div>
+      </div>
+      <h3 style="font-family:var(--font-display); margin-bottom:1rem;">Prossimi eventi</h3>
+      <div class="grid">
+        ${upcoming.length ? upcoming.map(e => eventCard(e)).join('') : '<p style="color:var(--muted)">Nessun evento in programma.</p>'}
+      </div>
+    </div>
+  `;
+  document.getElementById('app').innerHTML = html;
+}
+
+function renderGeneri() {
+  const html = `
+    <div class="view active">
+      <section class="hero"><h1>Esplora per <em>Genere</em></h1><p class="subtitle">Trova il sound che fa per te</p></section>
+      <div class="genre-tiles">
+        ${DATA.genres.map(g => `
+          <div class="genre-tile" style="background:${g.color}" onclick="location.hash='#genere/${slugify(g.name)}'">
+            <span>${g.name}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('app').innerHTML = html;
+}
+
+function renderGenereEvents(genreSlug) {
+  const genre = DATA.genres.find(g => slugify(g.name) === genreSlug)?.name;
+  if (!genre) return location.hash = '#generi';
+
+  const filtered = DATA.events.filter(e => e.genre === genre).sort((a,b) => a.date.localeCompare(b.date));
+
+  document.getElementById('nav').querySelectorAll('a').forEach(a => a.classList.remove('active'));
+  document.getElementById('nav').querySelector('a[href="#generi"]').classList.add('active');
+
+  const html = `
+    <div class="view active">
+      <button class="back-btn" onclick="location.hash='#generi'">← Torna ai generi</button>
+      <section class="hero">
+        <h1>Eventi <em>${genre}</em></h1>
+        <p class="subtitle">${filtered.length} date trovate</p>
+      </section>
+      <div class="grid">
+        ${filtered.map(e => eventCard(e)).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('app').innerHTML = html;
+}
+
+function eventCard(e) {
+  const v = getVenue(e.venueId);
+  const isToday = e.date === getToday();
+  return `
+    <article class="card">
+      <div class="card-img" style="background:${v?.image || 'var(--surface)'}"></div>
+      <div class="card-body">
+        <div class="card-time">${isToday ? 'Oggi' : formatDate(e.date)} · ${e.time}</div>
+        <h3 class="card-title">${e.title}</h3>
+        <p class="card-venue">${v?.name || 'Locale'} · ${v?.district || ''}</p>
+        <div class="meta">
+          <span class="tag ${e.genre === 'Techno' || e.genre === 'Elettronica' ? 'violet' : e.genre === 'Jazz' || e.genre === 'Hip-Hop' ? 'pink' : ''}">${e.genre}</span>
+          <span class="price">${e.price}</span>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function filterEvents(filter) {
+  const today = getToday();
+  let filtered = DATA.events.filter(e => e.date === today);
+  
+  if (filter === 'Gratis') filtered = filtered.filter(e => e.price.toLowerCase().includes('free') || e.price === '0');
+  else if (filter === 'Dopo 23:00') filtered = filtered.filter(e => parseInt(e.time) >= 23);
+  else if (filter !== 'all') filtered = filtered.filter(e => e.genre === filter);
+
+  filtered.sort((a,b) => a.time.localeCompare(b.time));
+  document.getElementById('events-grid').innerHTML = filtered.length ? filtered.map(eventCard).join('') : '<p style="color:var(--muted); grid-column:1/-1;">Nessun evento trovato con questo filtro.</p>';
+  
+  document.querySelectorAll('.filters .chip').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === (filter === 'all' ? 'Tutti' : filter));
+  });
+}
+</script>
+
+</body>
+</html>
