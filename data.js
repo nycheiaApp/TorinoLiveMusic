@@ -15,7 +15,7 @@ const DATA = {
       id: 'blank',
       name: 'BLANK',
       district: 'Aurora',
-      address: 'Via Ponzio 34',
+      address: 'Via Ponzio 34 ',
       capacity: '300 pax',
       image: 'linear-gradient(135deg, #FF3CAC, #D4FF00)',
       description: 'Spazio industriale riconvertito. Suono potente, luci immersive, programmazione elettronica e sperimentale.',
