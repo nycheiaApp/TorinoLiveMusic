@@ -1,17 +1,3 @@
-/**
- * 📝 TORINOLIVE — FILE DATI
- * 
- * ISTRUZIONI:
- * 1. Modifica gli array qui sotto aggiungendo/rimuovendo oggetti.
- * 2. Le date degli eventi DEVONO essere in formato "YYYY-MM-DD" (es: "2026-06-18").
- * 3. I "venueId" negli eventi devono corrispondere a un "id" nei locali.
- * 4. Salva il file e ricarica il browser.
- * 
- * Per le immagini dei locali puoi usare:
- * - Gradienti CSS: 'linear-gradient(135deg, #7B61FF, #FF3CAC)'
- * - URL di immagini: 'https://esempio.com/foto.jpg'
- */
-
 const DATA = {
   venues: [
     {
@@ -54,7 +40,6 @@ const DATA = {
       description: 'Terrazza sul Po. Serate a tema, live acustici e DJ set con vista mozzafiato.',
       instagram: '@caffemurazzi'
     }
-    // 📝 AGGIUNGI ALTRI LOCALI QUI
   ],
 
   events: [
@@ -63,7 +48,6 @@ const DATA = {
     { id: 3, title: 'Jazz in Piazza', date: '2026-06-18', time: '20:00', venueId: 'jazz-club', genre: 'Jazz', price: 'Free' },
     { id: 4, title: 'Post-Punk Night', date: '2026-06-18', time: '23:00', venueId: 'murazzi', genre: 'Rock', price: '€ 10' },
     { id: 5, title: 'Synthwave Revival', date: '2026-06-19', time: '22:30', venueId: 'blank', genre: 'Elettronica', price: '€ 15' }
-    // 📝 AGGIUNGI ALTRI EVENTI QUI
   ],
 
   genres: [
@@ -75,6 +59,5 @@ const DATA = {
     { name: 'Elettronica', color: '#FFD740' },
     { name: 'Punk', color: '#FF4081' },
     { name: 'World', color: '#69F0AE' }
-    // 📝 AGGIUNGI ALTRI GENERI QUI
   ]
 };
