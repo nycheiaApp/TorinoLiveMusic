@@ -15,7 +15,7 @@ const DATA = {
       id: 'blank',
       name: 'BLANK',
       district: 'Aurora',
-      address: 'Via Ponzio 34 ',
+      address: 'Via Ponzio 34',
       capacity: '300 pax',
       image: 'linear-gradient(135deg, #FF3CAC, #D4FF00)',
       description: 'Spazio industriale riconvertito. Suono potente, luci immersive, programmazione elettronica e sperimentale.',
@@ -89,37 +89,70 @@ const DATA = {
       website: 'https://www.combocollective.com'
     },
     {
-      id: 'circolo-lettori',
-      name: 'Circolo dei Lettori',
+      id: 'blah-blah',
+      name: 'Blah Blah',
       district: 'Centro',
-      address: 'Via Bogino 9',
-      capacity: '250 pax',
-      image: 'linear-gradient(135deg, #7B61FF, #69F0AE)',
-      description: 'Tempio della cultura torinese. Presentazioni libri, concerti intimi, reading e musica da camera.',
-      instagram: '@circololettori',
-      website: 'https://www.circololettori.it'
+      address: 'Via Po 23',
+      capacity: '200 pax',
+      image: 'linear-gradient(135deg, #FF4081, #00E5FF)',
+      description: 'Istituzione universitaria torinese dal 1992. Concerti indie, rock, elettronica e serate a tema nel cuore della città.',
+      instagram: '@blahblahtorino',
+      website: 'https://www.blahblahtorino.it'
     },
     {
-      id: 'teatro-caduta',
-      name: 'Teatro della Caduta',
+      id: 'folkclub',
+      name: 'Folkclub',
       district: 'Centro',
-      address: 'Via San Donato 66',
-      capacity: '100 pax',
-      image: 'linear-gradient(135deg, #FF4081, #7B61FF)',
-      description: 'Piccolo teatro indipendente. Musica sperimentale, improvvisazione, spettacoli multidisciplinari.',
-      instagram: '@teatrodellacaduta',
-      website: 'https://www.teatrodellacaduta.it'
-    },
-    {
-      id: 'circolo-babel',
-      name: 'Circolo Babel',
-      district: 'Centro',
-      address: 'Via San Francesco d\'Assisi 21',
+      address: 'Via Paganini 36',
       capacity: '150 pax',
       image: 'linear-gradient(135deg, #69F0AE, #FFD740)',
-      description: 'World music, jazz, fusion. Atmosfera cosmopolita, cocktail artigianali, serate multiculturali.',
-      instagram: '@circolobabel',
-      website: 'https://www.circolobabel.it'
+      description: 'Storica associazione dedicata al folk, world music e cantautorato. Programmazione curata e atmosfera accogliente.',
+      instagram: '@folkclubtorino',
+      website: 'https://www.folkclub.it'
+    },
+    {
+      id: 'ziggy-club',
+      name: 'Ziggy Club',
+      district: 'Centro',
+      address: 'Via San Francesco d\'Assisi 22',
+      capacity: '180 pax',
+      image: 'linear-gradient(135deg, #FF5252, #7B61FF)',
+      description: 'Rock, blues, cover band e serate tributo. Atmosfera british nel cuore di Torino.',
+      instagram: '@ziggyclubtorino',
+      website: 'https://www.ziggyclub.it'
+    },
+    {
+      id: 'lingotto-musica',
+      name: 'Lingotto Musica',
+      district: 'Lingotto',
+      address: 'Via Nizza 262',
+      capacity: '1500 pax',
+      image: 'linear-gradient(135deg, #5B44E8, #FF3CAC)',
+      description: 'Grande venue nel complesso del Lingotto. Concerti di artisti nazionali e internazionali, sound di alto livello.',
+      instagram: '@lingottomusica',
+      website: 'https://www.lingottomusica.it'
+    },
+    {
+      id: 'magazzino-gilgamesh',
+      name: 'Il Magazzino di Gilgamesh',
+      district: 'San Paolo',
+      address: 'Via San Marino 11/b',
+      capacity: '250 pax',
+      image: 'linear-gradient(135deg, #D4FF00, #00E5FF)',
+      description: 'Spazio culturale polifunzionale. Concerti, teatro, presentazioni e laboratori in un ex magazzino riconvertito.',
+      instagram: '@magazzinodigilgamesh',
+      website: 'https://www.magazzinodigilgamesh.it'
+    },
+    {
+      id: 'organizzato-torino',
+      name: 'Organizzato Torino',
+      district: 'Aurora',
+      address: 'Via Borgo Dora 31',
+      capacity: '200 pax',
+      image: 'linear-gradient(135deg, #E91E8C, #9BB800)',
+      description: 'Collettivo e spazio eventi indipendente. Musica emergente, arte, dj set e programmazione culturale alternativa.',
+      instagram: '@organizzatototino',
+      website: 'https://www.organizzatototino.it'
     }
   ],
 
@@ -131,7 +164,12 @@ const DATA = {
     { id: 5, title: 'Synthwave Revival', date: '2026-06-20', time: '22:30', venueId: 'spazio211', genre: 'Elettronica', price: '€ 15' },
     { id: 6, title: 'Hip-Hop Underground', date: '2026-06-20', time: '21:00', venueId: 'cap10100', genre: 'Hip-Hop', price: '€ 10' },
     { id: 7, title: 'Acoustic Session', date: '2026-06-21', time: '20:30', venueId: 'combo', genre: 'Indie', price: '€ 8' },
-    { id: 8, title: 'World Music Night', date: '2026-06-21', time: '21:00', venueId: 'circolo-babel', genre: 'World', price: '€ 12' }
+    { id: 8, title: 'Indie Night', date: '2026-06-19', time: '22:30', venueId: 'blah-blah', genre: 'Indie', price: '€ 8' },
+    { id: 9, title: 'Folk Session', date: '2026-06-20', time: '21:00', venueId: 'folkclub', genre: 'World', price: '€ 12' },
+    { id: 10, title: 'Rock Tribute', date: '2026-06-21', time: '22:00', venueId: 'ziggy-club', genre: 'Rock', price: '€ 10' },
+    { id: 11, title: 'Big Concert', date: '2026-06-22', time: '21:00', venueId: 'lingotto-musica', genre: 'Rock', price: '€ 35' },
+    { id: 12, title: 'Experimental Night', date: '2026-06-20', time: '21:30', venueId: 'magazzino-gilgamesh', genre: 'Elettronica', price: '€ 10' },
+    { id: 13, title: 'Alternative Collective', date: '2026-06-21', time: '23:00', venueId: 'organizzato-torino', genre: 'Techno', price: '€ 12' }
   ],
 
   genres: [
