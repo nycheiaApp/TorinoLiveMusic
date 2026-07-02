@@ -157,19 +157,20 @@ const DATA = {
   ],
 
   events: [
-    { id: 1, title: 'Madrilena', date: '2026-06-19', time: '21:30', venueId: 'cafe-liberta', genre: 'Indie', price: '€ 12' },
-    { id: 2, title: 'Noise Collective', date: '2026-06-19', time: '22:00', venueId: 'blank', genre: 'Techno', price: '€ 8' },
-    { id: 3, title: 'Jazz in Piazza', date: '2026-06-19', time: '20:00', venueId: 'jazz-club', genre: 'Jazz', price: 'Free' },
-    { id: 4, title: 'Post-Punk Night', date: '2026-06-19', time: '23:00', venueId: 'murazzi', genre: 'Rock', price: '€ 10' },
-    { id: 5, title: 'Synthwave Revival', date: '2026-06-20', time: '22:30', venueId: 'spazio211', genre: 'Elettronica', price: '€ 15' },
-    { id: 6, title: 'Hip-Hop Underground', date: '2026-06-20', time: '21:00', venueId: 'cap10100', genre: 'Hip-Hop', price: '€ 10' },
-    { id: 7, title: 'Acoustic Session', date: '2026-06-21', time: '20:30', venueId: 'combo', genre: 'Indie', price: '€ 8' },
-    { id: 8, title: 'Indie Night', date: '2026-06-19', time: '22:30', venueId: 'blah-blah', genre: 'Indie', price: '€ 8' },
-    { id: 9, title: 'Folk Session', date: '2026-06-20', time: '21:00', venueId: 'folkclub', genre: 'World', price: '€ 12' },
-    { id: 10, title: 'Rock Tribute', date: '2026-06-21', time: '22:00', venueId: 'ziggy-club', genre: 'Rock', price: '€ 10' },
-    { id: 11, title: 'Big Concert', date: '2026-06-22', time: '21:00', venueId: 'lingotto-musica', genre: 'Rock', price: '€ 35' },
-    { id: 12, title: 'Experimental Night', date: '2026-06-20', time: '21:30', venueId: 'magazzino-gilgamesh', genre: 'Elettronica', price: '€ 10' },
-    { id: 13, title: 'Alternative Collective', date: '2026-06-21', time: '23:00', venueId: 'organizzato-torino', genre: 'Techno', price: '€ 12' }
+    { id: 1, title: 'Madrilena', date: '2026-07-02', time: '21:30', venueId: 'cafe-liberta', genre: 'Indie', price: '€ 12' },
+    { id: 2, title: 'Noise Collective', date: '2026-07-02', time: '22:00', venueId: 'blank', genre: 'Techno', price: '€ 8' },
+    { id: 3, title: 'Jazz in Piazza', date: '2026-07-02', time: '20:00', venueId: 'jazz-club', genre: 'Jazz', price: 'Free' },
+    { id: 4, title: 'Post-Punk Night', date: '2026-07-02', time: '23:00', venueId: 'murazzi', genre: 'Rock', price: '€ 10' },
+    { id: 5, title: 'Indie Night', date: '2026-07-02', time: '22:30', venueId: 'blah-blah', genre: 'Indie', price: '€ 8' },
+    { id: 6, title: 'Synthwave Revival', date: '2026-07-03', time: '22:30', venueId: 'spazio211', genre: 'Elettronica', price: '€ 15' },
+    { id: 7, title: 'Hip-Hop Underground', date: '2026-07-03', time: '21:00', venueId: 'cap10100', genre: 'Hip-Hop', price: '€ 10' },
+    { id: 8, title: 'Folk Session', date: '2026-07-03', time: '21:00', venueId: 'folkclub', genre: 'World', price: '€ 12' },
+    { id: 9, title: 'Acoustic Session', date: '2026-07-04', time: '20:30', venueId: 'combo', genre: 'Indie', price: '€ 8' },
+    { id: 10, title: 'Rock Tribute', date: '2026-07-04', time: '22:00', venueId: 'ziggy-club', genre: 'Rock', price: '€ 10' },
+    { id: 11, title: 'Experimental Night', date: '2026-07-04', time: '21:30', venueId: 'magazzino-gilgamesh', genre: 'Elettronica', price: '€ 10' },
+    { id: 12, title: 'Big Concert', date: '2026-07-05', time: '21:00', venueId: 'lingotto-musica', genre: 'Rock', price: '€ 35' },
+    { id: 13, title: 'Alternative Collective', date: '2026-07-05', time: '23:00', venueId: 'organizzato-torino', genre: 'Techno', price: '€ 12' },
+    { id: 14, title: 'Blues Night', date: '2026-07-05', time: '21:30', venueId: 'hiroshima', genre: 'Rock', price: '€ 10' }
   ],
 
   genres: [
